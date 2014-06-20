@@ -2,15 +2,14 @@ require 'json'
 
 titles_str = open("titles.json").read
 titles = JSON.parse(titles_str)
-nouns = []
 
-titles.each do |title|
-  nouns += title.split("-").map { |title|
-    title.split /(?=[A-Z])/
+nouns = titles.map { |title|
+  title.split("-").map { |title| # for 'WebP-iOS-Sample'
+    title.split /(?=[A-Z])/ # 'FontAwesome' => 'Font' 'Awesome'
   }.flatten.map { |title|
-    title.split("+")
-  }.flatten.map {|str| str.downcase}.keep_if {|s| s.size > 1}
-end
+    title.split("+") # for 'UIImage+WebP'
+  }.flatten.map {|str| str.downcase}.keep_if {|s| s.size > 1} # to avoid vendor prefix
+}.flatten
 
 noun_count = Hash.new(0)
 
