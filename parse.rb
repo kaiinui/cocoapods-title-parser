@@ -4,11 +4,11 @@ titles_str = open("titles.json").read
 titles = JSON.parse(titles_str)
 
 nouns = titles.map { |title|
-  title.split("-").map { |title| # for 'WebP-iOS-Sample'
+  title.split("-").flat_map { |title| # for 'WebP-iOS-Sample'
     title.split /(?=[A-Z])/ # 'FontAwesome' => 'Font' 'Awesome'
-  }.flatten.map { |title|
+  }.flat_map { |title|
     title.split("+") # for 'UIImage+WebP'
-  }.flatten.map {|str| str.downcase}.keep_if {|s| s.size > 1} # to avoid vendor prefix
+  }.map {|str| str.downcase}.keep_if {|s| s.size > 1} # to avoid vendor prefix
 }.flatten
 
 noun_count = Hash.new(0)
